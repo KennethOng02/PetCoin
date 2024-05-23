@@ -1,13 +1,13 @@
 class ExpenseItem {
   String name;
-  double amount;
-  String currency;
+  String amount;
+  bool isExpense;
   DateTime dateTime;
 
   ExpenseItem({
     required this.name,
     required this.amount,
-    required this.currency,
+    required this.isExpense,
     required this.dateTime,
   });
 }

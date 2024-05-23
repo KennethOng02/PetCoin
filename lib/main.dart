@@ -1,24 +1,23 @@
 import 'package:flutter/material.dart';
-import 'home.dart';
-import 'transaction.dart';
-import 'notification.dart';
-import 'login.dart';
-import 'signup.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:petcoin/pages/homepage.dart';
+import 'package:petcoin/pages/loginpage.dart';
+import 'package:petcoin/pages/notificationpage.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(const MyApp());
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyan),
-      ),
+          primarySwatch: Colors.green,
+          colorScheme: ColorScheme.fromSeed(seedColor: Colors.green)),
       home: const MainPage(),
     );
   }
@@ -32,66 +31,65 @@ class MainPage extends StatefulWidget {
 }
 
 class _MainPageState extends State<MainPage> {
-  int currentPageIndex = 0;
-  Map<int, GlobalKey<NavigatorState>> navigatorKeys = {
-    0: GlobalKey<NavigatorState>(),
-    1: GlobalKey<NavigatorState>(),
-    2: GlobalKey<NavigatorState>(),
-    3: GlobalKey<NavigatorState>(),
-    4: GlobalKey<NavigatorState>(),
-    5: GlobalKey<NavigatorState>(),
-  };
+  int _selectedIndex = 0;
 
-  final List<Widget> _widgetOptions = <Widget>[
+  final List<Widget> _pages = <Widget>[
     HomePage(),
-    TransactionPage(),
+    Placeholder(),
     NotificationPage(),
     LoginPage(),
-    SignupPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: NavigationBar(
-        onDestinationSelected: (index) {
-          setState(() {
-            currentPageIndex = index;
-          });
-        },
-        indicatorColor: Theme.of(context).colorScheme.primaryContainer,
-        selectedIndex: currentPageIndex,
-        destinations: const <Widget>[
-          NavigationDestination(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.credit_card),
-            label: 'Transaction',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.notifications_sharp),
-            label: 'Notification',
-          ),
-          NavigationDestination(
-            icon: Icon(Icons.settings),
-            label: 'Setting',
-          ),
-        ],
+      appBar: AppBar(
+        title: Text('P E T C O I N'),
       ),
-      body: buildNavigator(),
-    );
-  }
-
-  buildNavigator() {
-    return Navigator(
-      key: navigatorKeys[currentPageIndex],
-      onGenerateRoute: (RouteSettings settings) {
-        return MaterialPageRoute(
-          builder: (_) => _widgetOptions.elementAt(currentPageIndex),
-        );
-      },
+      body: Center(
+        child: _pages.elementAt(_selectedIndex),
+      ),
+      bottomNavigationBar: Container(
+        color: Colors.black,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 20,
+          ),
+          child: GNav(
+            backgroundColor: Colors.black,
+            color: Colors.white,
+            activeColor: Colors.white,
+            tabBackgroundColor: Colors.grey.shade800,
+            gap: 8,
+            padding: EdgeInsets.all(16),
+            tabs: const [
+              GButton(
+                icon: Icons.home,
+                text: 'Home',
+              ),
+              GButton(
+                icon: Icons.favorite_border,
+                text: 'Favorite',
+              ),
+              GButton(
+                icon: Icons.notifications_none_outlined,
+                text: 'Notification',
+              ),
+              GButton(
+                icon: Icons.person,
+                text: 'Profile',
+              ),
+            ],
+            selectedIndex: _selectedIndex,
+            onTabChange: (index) {
+              setState(() {
+                _selectedIndex = index;
+              });
+            },
+          ),
+        ),
+      ),
     );
   }
 }
