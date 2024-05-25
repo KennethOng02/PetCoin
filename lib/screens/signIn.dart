@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petcoin/pages/signuppage.dart';
+import 'package:petcoin/screens/register.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

@@ -14,7 +14,7 @@ class NotificationPage extends StatelessWidget {
           separatorBuilder: (context, index) {
             return Divider();
           },
-          itemCount: 10),
+          itemCount: 5),
     );
   }
 

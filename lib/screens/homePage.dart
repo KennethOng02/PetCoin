@@ -1,17 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:petcoin/chart/piechart.dart';
-import 'package:petcoin/models/expense_item.dart';
+import 'package:petcoin/model/expense_item.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
-
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
-  final List<ExpenseItem> items = [];
   final nameController = TextEditingController();
   final amountController = TextEditingController();
   bool isExpense = false;
@@ -99,12 +95,6 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Column(
         children: <Widget>[
-          Expanded(
-            child: MyPieChart(
-              income: 200,
-              expense: 50,
-            ),
-          ),
           Expanded(
             child: ListView.separated(
               padding: const EdgeInsets.all(8),
