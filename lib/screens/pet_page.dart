@@ -1,35 +1,164 @@
-// lib/main.dart
 import 'package:flutter/material.dart';
+
 import 'duel_page.dart';
 
 /*
 ======================
-  utility functions
+  Utility functions
 ======================
 */
 
-int getPetLevel() {
-  return 1;
+int calculatePetLevel({
+  required double savingsRate,
+  required double expenseRate,
+  required double investmentReturnRate,
+  required double debtRate,
+  required double goalCompletionRate,
+}) {
+  /*
+  1. Monthly Savings Rate: 
+    The proportion of savings to income. This variable indicates the user's saving ability.
+  
+  2. Expense Control Rate: 
+    The ratio of monthly expenses to income. This variable shows the user's ability to control spending.
+  
+  3. Investment Return Rate:
+    The proportion of investment returns to the total amount invested. This variable indicates the user's investment capability.
+  
+  4. Debt Ratio:
+    The proportion of debt to income. This variable shows the user's debt management ability.
+  
+  5. Financial Goal Completion Rate:
+    The progress towards achieving set financial goals.
+  */
+
+  // Weights for each factor
+  double savingsWeight = 0.3;
+  double expenseWeight = 0.2;
+  double investmentWeight = 0.25;
+  double debtWeight = 0.15;
+  double goalCompletionWeight = 0.1;
+
+  // Calculate the level score
+  double levelScore = (savingsRate * savingsWeight) +
+                      ((1 - expenseRate) * expenseWeight) +
+                      (investmentReturnRate * investmentWeight) +
+                      ((1 - debtRate) * debtWeight) +
+                      (goalCompletionRate * goalCompletionWeight);
+
+  // Level 1 ~ 100
+  int petLevel = (levelScore * 100).toInt().clamp(1, 100);
+  
+  return petLevel;
 }
 
-/* 
+/*
 ======================
-  Dummy Database query
+  Dummy Database Query
 ======================
 */
 
-List<Map> getFriendList() {
+List<Map<String, dynamic>> getFriendList() {
   return [
-    {'id': 1, 'name': 'Alice', 'pet': 'cat'},
-    {'id': 2, 'name': 'Bob', 'pet': 'dog'},
-    {'id': 3, 'name': 'Charlie', 'pet': 'bird'},
-    {'id': 4, 'name': 'David', 'pet': 'dolphin'},
-    {'id': 5, 'name': 'Eve', 'pet': 'snake'},
-    {'id': 6, 'name': 'Frank', 'pet': 'turtle'},
-    {'id': 7, 'name': 'Grace', 'pet': 'unicorn'},
-    {'id': 8, 'name': 'Hank', 'pet': 'dragon'},
+    {
+      'id': 1,
+      'name': 'Alice',
+      'pet': 'cat',
+      'level': calculatePetLevel(
+        savingsRate: 0.3,
+        expenseRate: 0.9,
+        investmentReturnRate: 0.6,
+        debtRate: 0.9,
+        goalCompletionRate: 0.2
+      ),
+    },
+    {
+      'id': 2,
+      'name': 'Bob',
+      'pet': 'dog',
+      'level': calculatePetLevel(
+        savingsRate: 0.5,
+        expenseRate: 0.5,
+        investmentReturnRate: 0.6,
+        debtRate: 0.4,
+        goalCompletionRate: 0.7
+      ),
+    },
+    {
+      'id': 3,
+      'name': 'Charlie',
+      'pet': 'bird',
+      'level': calculatePetLevel(
+        savingsRate: 0.3,
+        expenseRate: 0.1,
+        investmentReturnRate: 0.1,
+        debtRate: 0.2,
+        goalCompletionRate: 0.1
+      ),
+    },
+    {
+      'id': 4,
+      'name': 'David',
+      'pet': 'dolphin',
+      'level': calculatePetLevel(
+        savingsRate: 0.5,
+        expenseRate: 0.5,
+        investmentReturnRate: 0.5,
+        debtRate: 0.5,
+        goalCompletionRate: 0.5
+      ),
+    },
+    {
+      'id': 5,
+      'name': 'Eve',
+      'pet': 'snake',
+      'level': calculatePetLevel(
+        savingsRate: 0.6,
+        expenseRate: 0.4,
+        investmentReturnRate: 0.6,
+        debtRate: 0.3,
+        goalCompletionRate: 0.7
+      ),
+    },
+    {
+      'id': 6,
+      'name': 'Frank',
+      'pet': 'turtle',
+      'level': calculatePetLevel(
+        savingsRate: 0.5,
+        expenseRate: 0.5,
+        investmentReturnRate: 0.5,
+        debtRate: 0.4,
+        goalCompletionRate: 0.6
+      ),
+    },
+    {
+      'id': 7,
+      'name': 'Grace',
+      'pet': 'unicorn',
+      'level': calculatePetLevel(
+        savingsRate: 0.8,
+        expenseRate: 0.2,
+        investmentReturnRate: 0.9,
+        debtRate: 0.1,
+        goalCompletionRate: 1.0
+      ),
+    },
+    {
+      'id': 8,
+      'name': 'Hank',
+      'pet': 'dragon',
+      'level': calculatePetLevel(
+        savingsRate: 0.7,
+        expenseRate: 0.3,
+        investmentReturnRate: 0.8,
+        debtRate: 0.2,
+        goalCompletionRate: 0.9
+      ),
+    },
   ];
 }
+
 
 List<String> getPetList() {
   return ['cat', 'dog', 'bird', 'dolphin', 'snake', 'turtle', 'unicorn', 'dragon'];
@@ -37,15 +166,24 @@ List<String> getPetList() {
 
 /*
 ======================
-  User Data
+  Dummy User Data
 ======================
 */
 
-int petLevel = getPetLevel();
 String? selectedPet;
 bool hasSelectedPet = false;
+double savingsRate = 0.5;
+double expenseRate = 0.5;
+double investmentReturnRate = 0.5;
+double debtRate = 0.5;
+double goalCompletionRate = 0.5;
 
-// Flutter code snippet
+/*
+======================
+  Flutter code snippet
+======================
+*/
+
 class PetPage extends StatefulWidget {
   @override
   State<PetPage> createState() => _PetPageState();
@@ -74,7 +212,6 @@ class _PetPageState extends State<PetPage> {
                     onTap: () {
                       setState(() {
                         selectedPet = pet;
-                        petLevel = 1;
                         hasSelectedPet = true;
                       });
                       Navigator.of(context).pop();
@@ -102,7 +239,7 @@ class _PetPageState extends State<PetPage> {
                   title: Text(friend['name']),
                   onTap: () {
                     Navigator.of(context).pop();
-                    _startDuel(friend['name']);
+                    _startDuel(friend);
                   },
                 );
               }).toList(),
@@ -113,30 +250,42 @@ class _PetPageState extends State<PetPage> {
     );
   }
 
-  void _startDuel(String friendName) {
+  void _startDuel(Map<String, dynamic> friend) {
     Navigator.of(context).push(
       PageRouteBuilder(
-        pageBuilder: (context, animation, secondaryAnimation) => DuelPage(friendName: friendName),
+        pageBuilder: (context, animation, secondaryAnimation) => DuelPage(
+          friendName: friend['name'],
+          userPet: selectedPet!,
+          friendPet: friend['pet'],
+          ),
         transitionDuration: Duration(seconds: 1),
         transitionsBuilder: (context, animation, secondaryAnimation, child) {
           return FadeTransition(opacity: animation, child: child);
         },
       ),
     );
-    Future.delayed(Duration(seconds: 1), () {
+    Future.delayed(Duration(milliseconds: 2500), () {
       Navigator.of(context).pop();
-      _showDuelResult(friendName);
+      _showDuelResult(friend);
     });
   }
 
-  void _showDuelResult(String friendName) {
+  void _showDuelResult(Map<String, dynamic> friend) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        bool win = (petLevel % 2 == 0);  // 假設：等級是偶數則勝利，否則失敗
+        bool win = (calculatePetLevel(
+          savingsRate: savingsRate,
+          expenseRate: expenseRate,
+          investmentReturnRate: investmentReturnRate,
+          debtRate: debtRate,
+          goalCompletionRate: goalCompletionRate
+        ) >= friend['level']);
         return AlertDialog(
           title: Text('Duel Result'),
-          content: Text(win ? 'You won against $friendName!' : 'You lost to $friendName.'),
+          content: Text(
+            win ? 'You won against ${friend['name']}! with ${friend['level']} ${friend['pet']} level.' :
+            'You lost to ${friend['name']} with ${friend['level']} ${friend['pet']} level.'),
           actions: [
             TextButton(
               onPressed: () {
@@ -152,6 +301,14 @@ class _PetPageState extends State<PetPage> {
 
   @override
   Widget build(BuildContext context) {
+    int petLevel = calculatePetLevel(
+      savingsRate: savingsRate,
+      expenseRate: expenseRate,
+      investmentReturnRate: investmentReturnRate,
+      debtRate: debtRate,
+      goalCompletionRate: goalCompletionRate
+    );
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(
