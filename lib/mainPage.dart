@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:petcoin/screens/homePage.dart';
 import 'package:petcoin/screens/notificationpage.dart';
+import 'package:petcoin/screens/userSettings.dart';
 import 'package:petcoin/screens/pet_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class _MainPageState extends State<MainPage> {
     Placeholder(),
     PetPage(),
     NotificationPage(),
-    Placeholder(),
+    UserSettings(),
   ];
 
   void _onItemTapped(int index) {

@@ -4,6 +4,9 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: Text('N O T I F I C A T I O N'),
+      ),
       body: ListView.separated(
           itemBuilder: (context, index) {
             return ListTile(
