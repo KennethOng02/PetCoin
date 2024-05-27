@@ -3,6 +3,7 @@ import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:petcoin/screens/homePage.dart';
 import 'package:petcoin/screens/notificationpage.dart';
 import 'package:petcoin/screens/userSettings.dart';
+import 'package:petcoin/screens/pet_page.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -15,7 +16,7 @@ class _MainPageState extends State<MainPage> {
   List<Widget> _pages = [
     HomePage(),
     Placeholder(),
-    Placeholder(),
+    PetPage(),
     NotificationPage(),
     UserSettings(),
   ];
