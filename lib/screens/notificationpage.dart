@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class NotificationPage extends StatelessWidget {
+  final List<String> notifications;
+
+  NotificationPage({super.key, required this.notifications});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -8,13 +12,15 @@ class NotificationPage extends StatelessWidget {
           itemBuilder: (context, index) {
             return ListTile(
               leading: Icon(Icons.message),
-              title: message(index, context),
+              title: index < notifications.length
+                  ? Text(notifications[index])
+                  : message(index, context),
             );
           },
           separatorBuilder: (context, index) {
             return Divider();
           },
-          itemCount: 5),
+          itemCount: notifications.length > 5 ? notifications.length : 5),
     );
   }
 
