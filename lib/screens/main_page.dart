@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
-import 'package:petcoin/screens/homePage.dart';
+import 'package:petcoin/model/auth.dart';
+import 'package:petcoin/screens/expense_page.dart';
 import 'package:petcoin/screens/notificationpage.dart';
-import 'package:petcoin/screens/userSettings.dart';
 import 'package:petcoin/screens/pet_page.dart';
+import 'package:petcoin/screens/user_settings.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class MainPage extends StatefulWidget {
   @override
@@ -18,8 +20,32 @@ class _MainPageState extends State<MainPage> {
     Placeholder(),
     PetPage(),
     NotificationPage(),
-    UserSettings(),
+    UserSettingsPage(),
   ];
+
+  final User? user = Auth().currentUser;
+
+  Future<void> signOut() async {
+    await Auth().signOut();
+  }
+
+  Widget _title() {
+    return const Text(
+      'P E T C O I N',
+      style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+    );
+  }
+
+  Widget _userUid() {
+    return Text(user?.email ?? 'User email');
+  }
+
+  Widget _signOutButton() {
+    return ElevatedButton(
+      onPressed: signOut,
+      child: const Text('Sign Out'),
+    );
+  }
 
   void _onItemTapped(int index) {
     setState(() {
