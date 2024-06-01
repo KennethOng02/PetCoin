@@ -12,10 +12,12 @@ dependencies:
   
   google_nav_bar: ^5.0.6
   fl_chart: ^0.68.0
-  toggle_switch: ^2.3.0
   firebase_core: ^2.31.1
   firebase_auth: ^4.19.6
+  cloud_firestore: ^4.17.4
   settings_ui: ^2.0.2
+  provider: ^6.1.2
+  intl: ^0.19.0
 
 dev_dependencies:
   flutter_test:
