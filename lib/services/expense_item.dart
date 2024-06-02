@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class ExpenseItem {
   String id;
   String name;
@@ -26,6 +28,15 @@ class ExpenseItem {
       name: map['name'],
       amount: map['amount'],
       dateTime: DateTime.parse(map['dateTime']),
+    );
+  }
+
+  factory ExpenseItem.fromDocument(DocumentSnapshot doc) {
+    return ExpenseItem(
+      id: doc.id,
+      name: doc['name'],
+      amount: doc['amount'],
+      dateTime: (doc['dateTime'] as Timestamp).toDate(),
     );
   }
 }

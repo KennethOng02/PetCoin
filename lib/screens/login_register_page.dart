@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:petcoin/model/auth.dart';
+import 'package:petcoin/services/auth.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

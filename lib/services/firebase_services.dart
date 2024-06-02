@@ -1,7 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:petcoin/model/auth.dart';
-import 'package:petcoin/model/expense_item.dart';
+import 'package:petcoin/services/auth.dart';
+import 'package:petcoin/services/currency_service.dart';
+import 'package:petcoin/services/expense_item.dart';
 
 class FirebaseService {
   final CollectionReference _expensesCollection =
@@ -13,17 +14,30 @@ class FirebaseService {
     return _expensesCollection.doc().id;
   }
 
+  Future<String> getUserCurrency() async {
+    final userDoc = await FirebaseFirestore.instance
+        .collection('users')
+        .doc(user!.uid)
+        .get();
+    return userDoc['currency'];
+  }
+
+  Future<void> updateUserCurrency(
+      String oldCurrency, String newCurrency) async {
+    final String userId = user!.uid;
+    final userDoc = FirebaseFirestore.instance.collection('users').doc(userId);
+    await updateAmounts(oldCurrency, newCurrency);
+    await userDoc.update({
+      'currency': newCurrency,
+    });
+  }
+
   Future<void> addExpense(ExpenseItem expense) async {
     try {
       final String userId = user!.uid;
       final subExpensescollection =
           _expensesCollection.doc(userId).collection('expenses');
 
-      // await _expensesCollection.add({
-      //   'name': expense.name,
-      //   'amount': expense.amount,
-      //   'dateTime': expense.dateTime,
-      // });
       await subExpensescollection.add({
         'name': expense.name,
         'amount': expense.amount,
@@ -51,6 +65,28 @@ class FirebaseService {
   }
 
   // UPDATE
+  Future<void> updateAmounts(String fromCurrency, String toCurrency) async {
+    FirebaseFirestore firestore = FirebaseFirestore.instance;
+    final String userId = user!.uid;
+    WriteBatch batch = firestore.batch();
+
+    CollectionReference userItemsCollection =
+        firestore.collection('expenses').doc(userId).collection('expenses');
+    QuerySnapshot userItemsSnapshot = await userItemsCollection.get();
+
+    for (var itemDoc in userItemsSnapshot.docs) {
+      ExpenseItem expenseItem = ExpenseItem.fromDocument(itemDoc);
+
+      double currentAmount = double.parse(expenseItem.amount);
+      double updatedAmount = await CurrencyService()
+          .convert(currentAmount, fromCurrency, toCurrency);
+
+      batch.update(itemDoc.reference, {
+        'amount': updatedAmount.toString(),
+      });
+    }
+    await batch.commit();
+  }
 
   // DELETE
   Future<void> deleteExpense(String id) async {
