@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:petcoin/model/auth.dart';
+import 'package:petcoin/services/auth.dart';
+import 'package:petcoin/services/currency_service.dart';
+import 'package:petcoin/services/firebase_services.dart';
 import 'package:settings_ui/settings_ui.dart';
 
 class UserSettingsPage extends StatefulWidget {
@@ -10,9 +12,24 @@ class UserSettingsPage extends StatefulWidget {
 
 class _UserSettingsPageState extends State<UserSettingsPage> {
   final User? user = Auth().currentUser;
+  String _userCurrency = '';
+  List<String> currencies = CurrencyService().getCurrencies();
 
-  Future<void> signOut() async {
+  Future<void> _signOut() async {
     await Auth().signOut();
+  }
+
+  Future<void> _getUserCurrency() async {
+    _userCurrency = await FirebaseService().getUserCurrency();
+    setState(() {});
+  }
+
+  Future<void> _updateUserCurrency(String newCurrency) async {
+    String oldCurrency = await FirebaseService().getUserCurrency();
+    setState(() {
+      _userCurrency = newCurrency;
+    });
+    await FirebaseService().updateUserCurrency(oldCurrency, newCurrency);
   }
 
   SettingsTile _account() {
@@ -35,15 +52,41 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
     return SettingsTile(
       title: Text('Currency'),
       leading: Icon(Icons.currency_yen_sharp),
-      value: Text(selectedCurrency),
+      value: Row(
+        children: [
+          Text(_userCurrency),
+          _currencyTrailing(),
+        ],
+      ),
     );
   }
 
-  Widget _logout() {
-    return ElevatedButton(
-      onPressed: signOut,
-      child: const Text('Sign Out'),
+  Widget _currencyTrailing() {
+    return PopupMenuButton(
+      icon: Icon(Icons.arrow_drop_down,
+          color: Theme.of(context).colorScheme.secondary),
+      iconSize: 30,
+      onSelected: (value) {
+        setState(() {
+          _userCurrency = value;
+          _updateUserCurrency(value);
+        });
+      },
+      itemBuilder: (_) => currencies
+          .map(
+            (e) => PopupMenuItem(
+              value: e,
+              child: Text(e),
+            ),
+          )
+          .toList(),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserCurrency();
   }
 
   @override
@@ -75,7 +118,7 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
               ),
               SettingsTile(
                 title: Text('Logout'),
-                onPressed: (context) => signOut(),
+                onPressed: (context) => _signOut(),
               ),
             ],
           ),

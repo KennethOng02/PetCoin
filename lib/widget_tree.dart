@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petcoin/model/auth.dart';
+import 'package:petcoin/services/auth.dart';
 import 'package:petcoin/screens/login_register_page.dart';
 import 'package:petcoin/screens/main_page.dart';
 
