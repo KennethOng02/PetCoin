@@ -12,22 +12,20 @@ class UserSettingsPage extends StatefulWidget {
 
 class _UserSettingsPageState extends State<UserSettingsPage> {
   final User? user = Auth().currentUser;
-  String? _userCurrency;
+  String _userCurrency = '';
   List<String> currencies = CurrencyService().getCurrencies();
 
-  Future<void> signOut() async {
+  Future<void> _signOut() async {
     await Auth().signOut();
   }
 
   Future<void> _getUserCurrency() async {
-    String userCurrency = await FirebaseService().getUserCurrency();
-    setState(() {
-      _userCurrency = userCurrency;
-    });
+    _userCurrency = await FirebaseService().getUserCurrency();
+    setState(() {});
   }
 
   Future<void> _updateUserCurrency(String newCurrency) async {
-    String oldCurrency = _userCurrency ?? 'USD';
+    String oldCurrency = await FirebaseService().getUserCurrency();
     setState(() {
       _userCurrency = newCurrency;
     });
@@ -56,7 +54,7 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
       leading: Icon(Icons.currency_yen_sharp),
       value: Row(
         children: [
-          Text(_userCurrency ?? ''),
+          Text(_userCurrency),
           _currencyTrailing(),
         ],
       ),
@@ -82,13 +80,6 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
             ),
           )
           .toList(),
-    );
-  }
-
-  Widget _logout() {
-    return ElevatedButton(
-      onPressed: signOut,
-      child: const Text('Sign Out'),
     );
   }
 
@@ -127,7 +118,7 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
               ),
               SettingsTile(
                 title: Text('Logout'),
-                onPressed: (context) => signOut(),
+                onPressed: (context) => _signOut(),
               ),
             ],
           ),

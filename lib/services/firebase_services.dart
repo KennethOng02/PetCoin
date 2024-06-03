@@ -82,7 +82,7 @@ class FirebaseService {
           .convert(currentAmount, fromCurrency, toCurrency);
 
       batch.update(itemDoc.reference, {
-        'amount': updatedAmount.toString(),
+        'amount': updatedAmount.toStringAsFixed(2),
       });
     }
     await batch.commit();

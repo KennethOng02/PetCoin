@@ -29,24 +29,6 @@ class _MainPageState extends State<MainPage> {
     await Auth().signOut();
   }
 
-  Widget _title() {
-    return const Text(
-      'P E T C O I N',
-      style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-    );
-  }
-
-  Widget _userUid() {
-    return Text(user?.email ?? 'User email');
-  }
-
-  Widget _signOutButton() {
-    return ElevatedButton(
-      onPressed: signOut,
-      child: const Text('Sign Out'),
-    );
-  }
-
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;

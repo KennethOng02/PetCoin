@@ -23,11 +23,6 @@ class CurrencyService {
     return currencies;
   }
 
-  Future<void> _getUserCurrency() async {
-    String userCurrency = await FirebaseService().getUserCurrency();
-    _userCurrency = userCurrency;
-  }
-
   Future<double> getExchangeRate(String fromCurrency, String toCurrency) async {
     await Future.delayed(Duration(seconds: 1)); // 模擬網絡延遲
     if (_rates.containsKey(fromCurrency) && _rates.containsKey(toCurrency)) {

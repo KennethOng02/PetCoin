@@ -8,8 +8,47 @@ class NotificationPage extends StatefulWidget {
 
 class _NotificationPageState extends State<NotificationPage> {
   final _reminderController = TextEditingController();
-  final _reminderService = ReminderService();
   int _reminderInterval = 60; // 初始化提醒時間為 60 分鐘
+  final List<String> _notifications = [];
+  late ReminderService _reminderService;
+  int _remainingTime = 0;
+  bool _hasNewNotification = false;
+
+  void _addNotification(String message) {
+    setState(() {
+      _notifications.add(message);
+      _hasNewNotification = true;
+    });
+  }
+
+  void _updateRemainingTime(int remainingTime) {
+    setState(() {
+      _remainingTime = remainingTime;
+      if (_remainingTime == 0 && _notifications.isNotEmpty) {
+        _hasNewNotification = true;
+      }
+    });
+  }
+
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return '$hours:$minutes:$seconds';
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _reminderService = ReminderService(
+      onReminder: _addNotification,
+      onTick: _updateRemainingTime,
+    );
+
+    _reminderService.startReminder(60);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,51 +88,34 @@ class _NotificationPageState extends State<NotificationPage> {
               ],
             ),
           ),
-          // Padding(
-          //   padding: const EdgeInsets.all(8.0),
-          //   child: Text(
-          //     '提醒週期：${_formatDuration(Duration(minutes: _reminderInterval))}',
-          //     style: TextStyle(fontSize: 18, color: Colors.blue),
-          //   ),
-          // ),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              '提醒週期：${_formatDuration(Duration(minutes: _reminderInterval))}',
+              style: TextStyle(fontSize: 18, color: Colors.blue),
+            ),
+          ),
           Expanded(
             child: ListView.separated(
                 itemBuilder: (context, index) {
                   return ListTile(
                     leading: Icon(Icons.message),
-                    title: message(index, context),
+                    title: Text(
+                      _notifications[index],
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
                   );
                 },
                 separatorBuilder: (context, index) {
                   return Divider();
                 },
-                itemCount: 5),
+                itemCount: _notifications.length),
           ),
         ],
       ),
     );
-  }
-
-  message(int index, BuildContext context) {
-    double textSize = 14;
-    return RichText(
-      maxLines: 3,
-      overflow: TextOverflow.ellipsis,
-      text: TextSpan(
-        text: 'Message Description',
-        style: TextStyle(
-          fontSize: textSize,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-      ),
-    );
-  }
-
-  String _formatDuration(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final hours = twoDigits(duration.inHours);
-    final minutes = twoDigits(duration.inMinutes.remainder(60));
-    final seconds = twoDigits(duration.inSeconds.remainder(60));
-    return '$hours:$minutes:$seconds';
   }
 }
