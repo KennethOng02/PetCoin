@@ -12,21 +12,17 @@ class _NotificationPageState extends State<NotificationPage> {
   final List<String> _notifications = [];
   late ReminderService _reminderService;
   int _remainingTime = 0;
-  bool _hasNewNotification = false;
 
   void _addNotification(String message) {
     setState(() {
       _notifications.add(message);
-      _hasNewNotification = true;
     });
   }
 
   void _updateRemainingTime(int remainingTime) {
     setState(() {
       _remainingTime = remainingTime;
-      if (_remainingTime == 0 && _notifications.isNotEmpty) {
-        _hasNewNotification = true;
-      }
+      if (_remainingTime == 0 && _notifications.isNotEmpty) {}
     });
   }
 

@@ -37,7 +37,13 @@ class _ExpenseTileState extends State<ExpenseTile> {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(widget.expense.name),
-      subtitle: Text(DateFormat('yyyy-MM-dd').format(widget.expense.dateTime)),
+      subtitle: Row(
+        children: [
+          Text(widget.expense.category),
+          const SizedBox(width: 5),
+          Text(DateFormat('yyyy-MM-dd').format(widget.expense.dateTime)),
+        ],
+      ),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:petcoin/services/auth.dart';
-import 'package:petcoin/services/firebase_services.dart';
 
 class CurrencyService {
   final User? user = Auth().currentUser;

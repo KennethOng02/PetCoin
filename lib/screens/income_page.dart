@@ -4,20 +4,19 @@ import 'package:petcoin/services/firebase_services.dart';
 import 'package:petcoin/services/expense_item.dart';
 import 'package:petcoin/widget/expense_tile.dart';
 
-class ExpensePage extends StatefulWidget {
+class IncomePage extends StatefulWidget {
   @override
-  State<ExpensePage> createState() => _ExpensePageState();
+  State<IncomePage> createState() => _IncomePageState();
 }
 
-class _ExpensePageState extends State<ExpensePage> {
+class _IncomePageState extends State<IncomePage> {
   final _nameController = TextEditingController();
   final _amountController = TextEditingController();
   String? _selectedCategory;
   final List<Map<String, dynamic>> categories = [
-    {'name': 'Food', 'icon': Icons.fastfood},
-    {'name': 'Transport', 'icon': Icons.directions_car},
-    {'name': 'Shopping', 'icon': Icons.shopping_bag},
-    {'name': 'Entertainment', 'icon': Icons.movie},
+    {'name': 'Salary', 'icon': Icons.attach_money},
+    {'name': 'Wages', 'icon': Icons.euro_symbol},
+    {'name': 'Investments', 'icon': Icons.trending_up},
     {'name': 'Others', 'icon': Icons.more_horiz},
   ];
   final TextEditingController _dateController = TextEditingController(
@@ -35,23 +34,23 @@ class _ExpensePageState extends State<ExpensePage> {
         child: Icon(Icons.add),
       ),
       body: StreamBuilder<List<ExpenseItem>>(
-        stream: _firebaseService.getExpenses(),
+        stream: _firebaseService.getIncomes(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
             return Center(child: Text('Error: ${snapshot.error}'));
           } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text('No expenses found'));
+            return Center(child: Text('No incomes found'));
           } else {
-            final expenses = snapshot.data!;
+            final incomes = snapshot.data!;
             return ListView.builder(
-              itemCount: expenses.length,
+              itemCount: incomes.length,
               itemBuilder: (context, index) {
                 return ExpenseTile(
-                  expense: expenses[index],
+                  expense: incomes[index],
                   onDelete: () =>
-                      _firebaseService.deleteExpense(expenses[index].id),
+                      _firebaseService.deleteIncome(incomes[index].id),
                 );
               },
             );
@@ -65,7 +64,7 @@ class _ExpensePageState extends State<ExpensePage> {
     return showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('New expense'),
+        title: Text('New income'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -160,7 +159,7 @@ class _ExpensePageState extends State<ExpensePage> {
 
   save(BuildContext context) {
     if (_nameController.text.isNotEmpty && _amountController.text.isNotEmpty) {
-      ExpenseItem newExpenseItem = ExpenseItem(
+      ExpenseItem newIncomeItem = ExpenseItem(
         id: _firebaseService.getId(),
         name: _nameController.text,
         amount: _amountController.text,
@@ -168,7 +167,7 @@ class _ExpensePageState extends State<ExpensePage> {
         dateTime: DateTime.parse(_dateController.text),
       );
 
-      _firebaseService.addExpense(newExpenseItem);
+      _firebaseService.addIncome(newIncomeItem);
 
       Navigator.pop(context);
 
