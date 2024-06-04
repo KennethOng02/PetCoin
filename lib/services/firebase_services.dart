@@ -8,6 +8,9 @@ class FirebaseService {
   final CollectionReference _expensesCollection =
       FirebaseFirestore.instance.collection('expenses');
 
+  final CollectionReference _incomesCollection =
+      FirebaseFirestore.instance.collection('incomes');
+
   final User? user = Auth().currentUser;
 
   String getId() {
@@ -36,12 +39,30 @@ class FirebaseService {
     try {
       final String userId = user!.uid;
       final subExpensescollection =
-          _expensesCollection.doc(userId).collection('expenses');
+          _expensesCollection.doc(userId).collection('expense');
 
       await subExpensescollection.add({
         'name': expense.name,
         'amount': expense.amount,
         'dateTime': expense.dateTime,
+        'category': expense.category,
+      });
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  Future<void> addIncome(ExpenseItem expense) async {
+    try {
+      final String userId = user!.uid;
+      final subIncomescollection =
+          _incomesCollection.doc(userId).collection('income');
+
+      await subIncomescollection.add({
+        'name': expense.name,
+        'amount': expense.amount,
+        'dateTime': expense.dateTime,
+        'category': expense.category,
       });
     } catch (e) {
       print(e.toString());
@@ -51,13 +72,32 @@ class FirebaseService {
   Stream<List<ExpenseItem>> getExpenses() {
     final String userId = user!.uid;
     final subExpensescollection =
-        _expensesCollection.doc(userId).collection('expenses');
+        _expensesCollection.doc(userId).collection('expense');
     return subExpensescollection.snapshots().map((snapshot) {
       return snapshot.docs.map((doc) {
         return ExpenseItem(
           id: doc.id,
           name: doc['name'],
           amount: doc['amount'],
+          category: doc['category'],
+          dateTime: (doc['dateTime'] as Timestamp).toDate(),
+        );
+      }).toList();
+    });
+  }
+
+  Stream<List<ExpenseItem>> getIncomes() {
+    final String userId = user!.uid;
+    final subIncomescollection =
+        _incomesCollection.doc(userId).collection('income');
+
+    return subIncomescollection.snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        return ExpenseItem(
+          id: doc.id,
+          name: doc['name'],
+          amount: doc['amount'],
+          category: doc['category'],
           dateTime: (doc['dateTime'] as Timestamp).toDate(),
         );
       }).toList();
@@ -71,7 +111,8 @@ class FirebaseService {
     WriteBatch batch = firestore.batch();
 
     CollectionReference userItemsCollection =
-        firestore.collection('expenses').doc(userId).collection('expenses');
+        firestore.collection('expenses').doc(userId).collection('expense');
+
     QuerySnapshot userItemsSnapshot = await userItemsCollection.get();
 
     for (var itemDoc in userItemsSnapshot.docs) {
@@ -92,9 +133,21 @@ class FirebaseService {
   Future<void> deleteExpense(String id) async {
     final String userId = user!.uid;
     final subExpensescollection =
-        _expensesCollection.doc(userId).collection('expenses');
+        _expensesCollection.doc(userId).collection('expense');
     try {
       final documentRef = subExpensescollection.doc(id);
+      await documentRef.delete();
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> deleteIncome(String id) async {
+    final String userId = user!.uid;
+    final subIncomescollection =
+        _incomesCollection.doc(userId).collection('income');
+    try {
+      final documentRef = subIncomescollection.doc(id);
       await documentRef.delete();
     } catch (e) {
       print(e);

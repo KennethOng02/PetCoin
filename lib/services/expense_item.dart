@@ -4,12 +4,14 @@ class ExpenseItem {
   String id;
   String name;
   String amount;
+  String category;
   DateTime dateTime;
 
   ExpenseItem({
     required this.id,
     required this.name,
     required this.amount,
+    required this.category,
     required this.dateTime,
   });
 
@@ -27,6 +29,7 @@ class ExpenseItem {
       id: map['id'],
       name: map['name'],
       amount: map['amount'],
+      category: map['category'],
       dateTime: DateTime.parse(map['dateTime']),
     );
   }
@@ -36,6 +39,7 @@ class ExpenseItem {
       id: doc.id,
       name: doc['name'],
       amount: doc['amount'],
+      category: doc['category'],
       dateTime: (doc['dateTime'] as Timestamp).toDate(),
     );
   }

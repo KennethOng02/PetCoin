@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
+import 'package:petcoin/screens/income_expense_page.dart';
 import 'package:petcoin/services/auth.dart';
-import 'package:petcoin/screens/expense_page.dart';
 import 'package:petcoin/screens/notificationpage.dart';
 import 'package:petcoin/screens/pet_page.dart';
 import 'package:petcoin/screens/user_settings.dart';
@@ -16,7 +16,7 @@ class _MainPageState extends State<MainPage> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   int _selectedIndex = 0;
   List<Widget> _pages = [
-    HomePage(),
+    IncomeExpensePage(),
     Placeholder(),
     PetPage(),
     NotificationPage(),
