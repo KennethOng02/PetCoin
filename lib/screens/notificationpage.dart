@@ -20,10 +20,11 @@ class _NotificationPageState extends State<NotificationPage> {
   }
 
   void _updateRemainingTime(int remainingTime) {
-    setState(() {
-      _remainingTime = remainingTime;
-      if (_remainingTime == 0 && _notifications.isNotEmpty) {}
-    });
+    if (mounted) {
+      setState(() {
+        _remainingTime = remainingTime;
+      });
+    }
   }
 
   String _formatDuration(Duration duration) {

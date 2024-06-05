@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:petcoin/services/auth.dart';
+import 'package:petcoin/services/auth_service.dart';
 import 'package:petcoin/screens/login_register_page.dart';
 import 'package:petcoin/screens/main_page.dart';
 
@@ -12,7 +12,7 @@ class _WidgetTreeState extends State<WidgetTree> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
-      stream: Auth().authStateChanges,
+      stream: AuthService().authStateChanges,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return MainPage();

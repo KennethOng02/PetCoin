@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:petcoin/services/auth.dart';
+import 'package:petcoin/services/auth_service.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -18,7 +18,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> signInWithEmailAndPassword() async {
     try {
-      await Auth().signInWithEmailAndPassword(
+      await AuthService().signInWithEmailAndPassword(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
@@ -31,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
 
   Future<void> createUserWithEmailAndPassword() async {
     try {
-      await Auth().createUserWithEmailAndPassword(
+      await AuthService().createUserWithEmailAndPassword(
         _emailController.text.trim(),
         _passwordController.text.trim(),
       );
@@ -46,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
     return const Column(
       children: [
         Text(
-          'PETCOIN',
+          'P E T C O I N',
           style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
         ),
         Text(
@@ -154,12 +154,6 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'A C C O U N T',
-          style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
-        ),
-      ),
       body: Container(
         height: double.infinity,
         width: double.infinity,
