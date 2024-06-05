@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:petcoin/services/firebase_services.dart';
-import 'package:petcoin/services/expense_item.dart';
+import 'package:petcoin/models/expense_item.dart';
 import 'package:petcoin/widget/expense_tile.dart';
 
 class IncomePage extends StatefulWidget {
@@ -91,9 +91,7 @@ class _IncomePageState extends State<IncomePage> {
                 prefixIcon: Icon(Icons.calendar_today),
               ),
               readOnly: true,
-              onTap: () {
-                _selectDate(context);
-              },
+              onTap: () => _selectDate(context),
             ),
             DropdownButtonFormField<String>(
               value: _selectedCategory,
@@ -160,7 +158,7 @@ class _IncomePageState extends State<IncomePage> {
   save(BuildContext context) {
     if (_nameController.text.isNotEmpty && _amountController.text.isNotEmpty) {
       ExpenseItem newIncomeItem = ExpenseItem(
-        id: _firebaseService.getId(),
+        id: _firebaseService.getId,
         name: _nameController.text,
         amount: _amountController.text,
         category: _selectedCategory!,

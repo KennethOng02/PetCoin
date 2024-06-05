@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:petcoin/services/expense_item.dart';
+import 'package:petcoin/models/expense_item.dart';
 import 'package:petcoin/services/firebase_services.dart';
 
 class ExpenseTile extends StatefulWidget {

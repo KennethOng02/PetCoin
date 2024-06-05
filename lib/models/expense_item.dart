@@ -20,6 +20,7 @@ class ExpenseItem {
       'id': id,
       'name': name,
       'amount': amount,
+      'category': category,
       'dateTime': dateTime.toIso8601String(),
     };
   }
@@ -30,7 +31,7 @@ class ExpenseItem {
       name: map['name'],
       amount: map['amount'],
       category: map['category'],
-      dateTime: DateTime.parse(map['dateTime']),
+      dateTime: (map['dateTime'] as Timestamp).toDate(),
     );
   }
 

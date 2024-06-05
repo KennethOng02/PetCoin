@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:petcoin/services/auth.dart';
+import 'package:petcoin/services/auth_service.dart';
 import 'package:petcoin/services/currency_service.dart';
 import 'package:petcoin/services/firebase_services.dart';
 import 'package:settings_ui/settings_ui.dart';
@@ -11,12 +11,14 @@ class UserSettingsPage extends StatefulWidget {
 }
 
 class _UserSettingsPageState extends State<UserSettingsPage> {
-  final User? user = Auth().currentUser;
+  final User? user = AuthService().currentUser;
   String _userCurrency = '';
-  List<String> currencies = CurrencyService().getCurrencies();
+  List<String> currencies = CurrencyService().getAvailableCurrencies;
+  String selectedCurrency = 'NTD';
+  bool areNotificationsEnabled = true;
 
   Future<void> _signOut() async {
-    await Auth().signOut();
+    await AuthService().signOut();
   }
 
   Future<void> _getUserCurrency() async {
@@ -91,13 +93,11 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    String selectedCurrency = 'NTD';
-    bool areNotificationsEnabled = true;
-
     return Scaffold(
       appBar: AppBar(
         title: Text('S E T T I N G'),
       ),
+      backgroundColor: Colors.white,
       body: SettingsList(
         sections: [
           SettingsSection(
@@ -116,6 +116,10 @@ class _UserSettingsPageState extends State<UserSettingsPage> {
                 },
                 initialValue: areNotificationsEnabled,
               ),
+            ],
+          ),
+          SettingsSection(
+            tiles: [
               SettingsTile(
                 title: Text('Logout'),
                 onPressed: (context) => _signOut(),

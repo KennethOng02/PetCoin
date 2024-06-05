@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:petcoin/services/firebase_services.dart';
-import 'package:petcoin/services/expense_item.dart';
+import 'package:petcoin/models/expense_item.dart';
 import 'package:petcoin/widget/expense_tile.dart';
 
 class ExpensePage extends StatefulWidget {
@@ -12,6 +12,9 @@ class ExpensePage extends StatefulWidget {
 class _ExpensePageState extends State<ExpensePage> {
   final _nameController = TextEditingController();
   final _amountController = TextEditingController();
+  final _dateController = TextEditingController(
+    text: DateFormat('yyyy-MM-dd').format(DateTime.now()),
+  );
   String? _selectedCategory;
   final List<Map<String, dynamic>> categories = [
     {'name': 'Food', 'icon': Icons.fastfood},
@@ -20,8 +23,6 @@ class _ExpensePageState extends State<ExpensePage> {
     {'name': 'Entertainment', 'icon': Icons.movie},
     {'name': 'Others', 'icon': Icons.more_horiz},
   ];
-  final TextEditingController _dateController = TextEditingController(
-      text: DateFormat('yyyy-MM-dd').format(DateTime.now()));
   DateTime selectedDate = DateTime.now();
   final FirebaseService _firebaseService = FirebaseService();
 
@@ -92,9 +93,7 @@ class _ExpensePageState extends State<ExpensePage> {
                 prefixIcon: Icon(Icons.calendar_today),
               ),
               readOnly: true,
-              onTap: () {
-                _selectDate(context);
-              },
+              onTap: () => _selectDate(context),
             ),
             DropdownButtonFormField<String>(
               value: _selectedCategory,
@@ -161,7 +160,7 @@ class _ExpensePageState extends State<ExpensePage> {
   save(BuildContext context) {
     if (_nameController.text.isNotEmpty && _amountController.text.isNotEmpty) {
       ExpenseItem newExpenseItem = ExpenseItem(
-        id: _firebaseService.getId(),
+        id: _firebaseService.getId,
         name: _nameController.text,
         amount: _amountController.text,
         category: _selectedCategory!,

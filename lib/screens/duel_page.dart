@@ -5,14 +5,18 @@ class DuelPage extends StatefulWidget {
   final String userPet;
   final String friendPet;
 
-  DuelPage({required this.friendName, required this.userPet, required this.friendPet});
+  DuelPage(
+      {required this.friendName,
+      required this.userPet,
+      required this.friendPet});
 
   @override
   // ignore: library_private_types_in_public_api
   _DuelPageState createState() => _DuelPageState();
 }
 
-class _DuelPageState extends State<DuelPage> with SingleTickerProviderStateMixin {
+class _DuelPageState extends State<DuelPage>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
   @override
